@@ -28,13 +28,8 @@ public class UserService {
         return userRepository.findUserByEmail(email);
     }
 
-    public void addNewUser(User user) {
-        Optional<User> existingStudent = userRepository.findUserByEmail(user.getEmail());
-
-        if (existingStudent.isPresent()) {
-            throw new IllegalStateException("Email is already in use!");
-        }
-
-        userRepository.save(user);
+    public User addNewUser(User user) {
+        // Save user directly
+        return userRepository.save(user); // Return the saved user
     }
 }

@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin("http://localhost:3000")
 public class UserController {
     private final UserService userService;
     @Autowired
@@ -24,13 +25,17 @@ public class UserController {
 
 
 
-    @GetMapping("/email")
-    public ResponseEntity<String> getUserByEmail(@RequestParam String email, User user) {
-        Optional<String> existingEmail = userService.findEmailByEmail(user.getEmail());
-        if (existingEmail.isPresent()) {
-            return ResponseEntity.ok(existingEmail.get()); // Return the email if found
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!"); // Return 404 if not found
+    @GetMapping("/exists")
+    public ResponseEntity<?> getUserByEmail(@RequestParam String email) {
+        Optional<User> existingUser = userService.findUserByEmail(email);
+
+        // If the user is found, return the user object
+        if (existingUser.isPresent()) {
+            return ResponseEntity.ok(existingUser.get());
+        }
+        // If not found, return a 404 Not Found status
+        else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         }
     }
 
