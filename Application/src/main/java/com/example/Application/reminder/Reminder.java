@@ -15,6 +15,25 @@ public class Reminder {
     private LocalDate reminderDate;
     private String reminderTime;
 
+    public Reminder(){
+
+    }
+
+    public Reminder (Long id, Long userId, String reminderName, LocalDate reminderDate, String reminderTime){
+        this.id = id;
+        this.userId = userId;
+        this.reminderName = reminderName;
+        this.reminderDate = reminderDate;
+        this.reminderTime = reminderTime;
+    }
+
+    public Reminder(Long userId, String reminderName, LocalDate reminderDate, String reminderTime){
+        this.userId = userId;
+        this.reminderName = reminderName;
+        this.reminderDate = reminderDate;
+        this.reminderTime = reminderTime;
+    }
+
     public Long getId() {
         return id;
     }

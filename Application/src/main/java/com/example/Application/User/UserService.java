@@ -24,6 +24,16 @@ public class UserService {
         return userRepository.findEmailByEmail(email);
     }
 
+    public Long getUserIdFromEmail(String userEmail){
+        Optional<User> user = userRepository.findUserByEmail(userEmail);
+        if (user.isPresent()){
+            return user.get().getId();
+        }
+        else{
+            return null;
+        }
+    }
+
     public Optional<User> findUserByEmail(String email) {
         return userRepository.findUserByEmail(email);
     }
