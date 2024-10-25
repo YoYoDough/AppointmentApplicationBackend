@@ -21,8 +21,19 @@ public class ReminderController {
     }
 
     @GetMapping
-    public List<Reminder> getRemindersForUser(){
+    public List<Reminder> getReminders(){
+        System.out.println(reminderService.getUsers());
         return reminderService.getUsers();
+    }
+    @GetMapping("/id")
+    public List<Reminder> getRemindersForUser(@RequestParam String email){
+        Long userId = userService.getUserIdFromEmail(email);
+        if (userId == null)
+        {
+            throw new IllegalStateException("User not found!");
+        }
+        List<Reminder> userReminders = reminderService.getRemindersWithId(userId);
+        return userReminders;
     }
     @PostMapping
     public void addReminder(@RequestBody Reminder reminder, @RequestParam String userEmail){

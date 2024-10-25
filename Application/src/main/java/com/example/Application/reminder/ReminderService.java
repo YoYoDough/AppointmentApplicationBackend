@@ -20,4 +20,8 @@ public class ReminderService {
     public List<Reminder> getUsers() {
         return reminderRepository.findAll();
     }
+
+    public List<Reminder> getRemindersWithId(Long userId) {
+        return reminderRepository.findRemindersWithId(userId);
+    }
 }
