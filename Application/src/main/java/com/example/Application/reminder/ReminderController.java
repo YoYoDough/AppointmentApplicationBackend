@@ -4,6 +4,7 @@ import com.example.Application.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
 import java.util.List;
 
 @RestController
@@ -44,5 +45,19 @@ public class ReminderController {
         reminder.setUserId(userId);
         System.out.println(reminder);
         reminderService.addNewReminder(reminder);
+    }
+
+    @DeleteMapping
+    public void deleteReminder(@RequestBody List <Long> remindersToDelete){
+        for (Long id: remindersToDelete){
+            Reminder selectedReminder = reminderService.getReminderWithId(id);
+            reminderService.deleteSelectedReminder(selectedReminder);
+        }
+    }
+
+    @PutMapping
+    public void updateReminder(@RequestBody List <Long> reminderToUpdate, @RequestParam Long id){
+        Reminder updateReminder = reminderService.getReminderWithId(id);
+        reminderService.updateReminder(updateReminder);
     }
 }
