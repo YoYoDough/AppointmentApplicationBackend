@@ -23,8 +23,8 @@ public class ReminderController {
 
     @GetMapping
     public List<Reminder> getReminders(){
-        System.out.println(reminderService.getUsers());
-        return reminderService.getUsers();
+        System.out.println(reminderService.getReminders());
+        return reminderService.getReminders();
     }
     @GetMapping("/id")
     public List<Reminder> getRemindersForUser(@RequestParam String email){
@@ -56,8 +56,7 @@ public class ReminderController {
     }
 
     @PutMapping
-    public void updateReminder(@RequestBody List <Long> reminderToUpdate, @RequestParam Long id){
-        Reminder updateReminder = reminderService.getReminderWithId(id);
-        reminderService.updateReminder(updateReminder);
+    public void updateReminder(@RequestBody Reminder reminderToUpdate){
+        reminderService.updateReminder(reminderToUpdate);
     }
 }

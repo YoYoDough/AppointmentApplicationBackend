@@ -18,7 +18,7 @@ public class ReminderService {
         reminderRepository.save(reminder);
     }
 
-    public List<Reminder> getUsers() {
+    public List<Reminder> getReminders() {
         return reminderRepository.findAll();
     }
 
@@ -41,6 +41,6 @@ public class ReminderService {
     }
 
     public void updateReminder(Reminder updateReminder) {
-        reminderRepository.
+        reminderRepository.save(updateReminder);
     }
 }
