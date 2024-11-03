@@ -34,6 +34,15 @@ public class UserService {
         }
     }
 
+    public String getUserEmailFromId(Long userId){
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent())
+        {
+            return user.get().getEmail();
+        }
+        return null;
+    }
+
     public Optional<User> findUserByEmail(String email) {
         return userRepository.findUserByEmail(email);
     }
