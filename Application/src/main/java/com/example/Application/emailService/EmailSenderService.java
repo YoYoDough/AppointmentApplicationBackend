@@ -1,7 +1,5 @@
 package com.example.Application.emailService;
 
-import com.example.Application.User.UserService;
-import com.example.Application.reminder.ReminderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,8 +7,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmailSenderService {
+
+    private final JavaMailSender mailSender;
+
     @Autowired
-    private JavaMailSender mailSender;
+    public EmailSenderService(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
+
     public void sendReminderEmail(String to, String subject, String text){
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);

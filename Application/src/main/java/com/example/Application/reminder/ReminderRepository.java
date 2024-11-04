@@ -12,6 +12,6 @@ import java.util.List;
 public interface ReminderRepository extends JpaRepository<Reminder, Long> {
     @Query("SELECT r FROM Reminder r WHERE r.userId = :userId")
     List<Reminder> findRemindersWithId(@Param("userId") Long userId);
-
-    List<Reminder> findByReminderDate(LocalDate date);
+    @Query("SELECT r FROM Reminder r WHERE r.reminderDate = :date")
+    List<Reminder> findByReminderDate(@Param("date") LocalDate date);
 }
