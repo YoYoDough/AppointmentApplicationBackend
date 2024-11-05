@@ -5,6 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Array;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -43,6 +47,20 @@ public class ReminderController {
             throw new IllegalStateException("User not found!");
         }
         reminder.setUserId(userId);
+        // Combine reminder date and time
+        if (reminder.getReminderTime() != null)
+        {
+            String dateTimeString = reminder.getReminderDate().toString() + " " + reminder.getReminderTime();
+
+            // Parse the combined date and time string
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd h:mm a");
+            LocalDateTime localDateTime = LocalDateTime.parse(dateTimeString, formatter);
+
+            // Convert the LocalDateTime to UTC Instant
+            Instant reminderTimeUtc = localDateTime.atZone(ZoneId.of(reminder.getUserTimeZone())).toInstant();
+            reminder.setReminderTimeUtc(reminderTimeUtc);
+        }
+
         System.out.println(reminder);
         reminderService.addNewReminder(reminder);
     }
@@ -57,6 +75,9 @@ public class ReminderController {
 
     @PutMapping
     public void updateReminder(@RequestBody Reminder reminderToUpdate){
+        LocalDateTime localDateTime = LocalDateTime.parse(reminderToUpdate.getReminderTime(), DateTimeFormatter.ofPattern("h:mm a"));
+        Instant reminderTimeUtc = localDateTime.atZone(ZoneId.of(reminderToUpdate.getUserTimeZone())).toInstant();
+        reminderToUpdate.setReminderTimeUtc(reminderTimeUtc);
         reminderService.updateReminder(reminderToUpdate);
     }
 }
