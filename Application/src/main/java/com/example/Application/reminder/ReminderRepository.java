@@ -14,4 +14,6 @@ public interface ReminderRepository extends JpaRepository<Reminder, Long> {
     List<Reminder> findRemindersWithId(@Param("userId") Long userId);
     @Query("SELECT r FROM Reminder r WHERE r.reminderDate IN :dates")
     List<Reminder> findByReminderDate(@Param("dates") List<LocalDate> dates);
+
+
 }

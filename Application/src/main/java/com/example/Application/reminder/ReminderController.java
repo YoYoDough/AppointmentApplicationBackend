@@ -2,13 +2,16 @@ package com.example.Application.reminder;
 
 import com.example.Application.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.Array;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RestController
@@ -74,10 +77,22 @@ public class ReminderController {
     }
 
     @PutMapping
-    public void updateReminder(@RequestBody Reminder reminderToUpdate){
-        LocalDateTime localDateTime = LocalDateTime.parse(reminderToUpdate.getReminderTime(), DateTimeFormatter.ofPattern("h:mm a"));
-        Instant reminderTimeUtc = localDateTime.atZone(ZoneId.of(reminderToUpdate.getUserTimeZone())).toInstant();
-        reminderToUpdate.setReminderTimeUtc(reminderTimeUtc);
+    public void updateReminder(@RequestBody Reminder reminderToUpdate) {
+        if (reminderToUpdate.getReminderTime() != null) {
+            String dateTimeString = reminderToUpdate.getReminderDate() + " " + reminderToUpdate.getReminderTime();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd h:mm a");
+
+            // Parse the date-time string into LocalDateTime
+            try {
+                LocalDateTime localDateTime = LocalDateTime.parse(dateTimeString, formatter);
+                Instant reminderTimeUtc = localDateTime.atZone(ZoneId.of(reminderToUpdate.getUserTimeZone())).toInstant();
+                reminderToUpdate.setReminderTimeUtc(reminderTimeUtc);
+            } catch (DateTimeParseException e) {
+                // Handle exception
+                System.err.println("Failed to parse date time: " + e.getMessage());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid date or time format", e);
+            }
+        }
         reminderService.updateReminder(reminderToUpdate);
     }
 }
